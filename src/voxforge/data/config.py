@@ -5,7 +5,11 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 DATA_DIR = PROJECT_ROOT / "data"
 
+ARTIFACTS_DIR = PROJECT_ROOT / "artifacts"
+REPORTS_DIR = ARTIFACTS_DIR / "reports"
+
 RAW_DATA_DIR = DATA_DIR / "raw"
+INTERIM_DATA_DIR = DATA_DIR / "interim"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 EXTERNAL_DATA_DIR = DATA_DIR / "external"
 
