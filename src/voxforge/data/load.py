@@ -14,16 +14,19 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 #   Load a CSV file into a pandas DataFrame.
-def load_csv(path: Path) -> pd.DataFrame:
+# implementing daat provenances
+def load_csv(path):
     df = pd.read_csv(
         path,
         low_memory=False,
     )
 
+    df["source_dataset"] = path.stem
 
     logger.info("Loaded %s rows", len(df))
 
     return df
+
 
 # Load every raw dataset.
 def load_all() -> dict[str, pd.DataFrame]:
