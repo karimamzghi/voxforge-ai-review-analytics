@@ -1,0 +1,73 @@
+# ==========================
+# Environment
+# ==========================
+.env
+.env.*
+!.env.example
+
+# ==========================
+# Python
+# ==========================
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# ==========================
+# Jupyter
+# ==========================
+.ipynb_checkpoints/
+
+# ==========================
+# Data
+# ==========================
+data/raw/*
+data/processed/*
+data/external/*
+
+# Keep folder structure
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/external/.gitkeep
+!data/README.md
+
+# ==========================
+# ML Artifacts
+# ==========================
+artifacts/models/*
+artifacts/vectorizers/*
+artifacts/embeddings/*
+artifacts/clusters/*
+artifacts/reports/*
+artifacts/summaries/*
+
+# Keep folder structure
+!artifacts/**/.gitkeep
+
+# ==========================
+# Frontend
+# ==========================
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# ==========================
+# IDE
+# ==========================
+.vscode/
+.idea/
+
+# ==========================
+# OS
+# ==========================
+.DS_Store
+Thumbs.db
+
+# ==========================
+# Logs
+# ==========================
+*.log
+logs/
