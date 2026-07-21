@@ -19,3 +19,4 @@ def validate_columns(df: pd.DataFrame):
         raise ValueError(
             f"Missing columns: {missing}"
         )
+    
