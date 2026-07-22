@@ -1,96 +1,90 @@
-"""CSV-based experiment tracking for model comparisons."""
-
-from __future__ import annotations
-
-import json
 from datetime import datetime, timezone
+import json
 from pathlib import Path
-from typing import Any
 
-import numpy as np
 import pandas as pd
 
-from src.config import EXPERIMENT_TRACKING_PATH
 
-# Convert common ML and scientific Python objects into JSON-safe values.
-def _json_serializer(value: Any) -> Any:
-
+def _make_json_safe(value):
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+    if isinstance(value, dict):
+        return {str(k): _make_json_safe(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple, set)):
+        return [_make_json_safe(v) for v in value]
     if isinstance(value, Path):
         return str(value)
-
-    if isinstance(value, np.integer):
-        return int(value)
-
-    if isinstance(value, np.floating):
-        return float(value)
-
-    if isinstance(value, np.ndarray):
-        return value.tolist()
-
-    if isinstance(value, np.bool_):
-        return bool(value)
-
+    if hasattr(value, "tolist"):
+        try:
+            return _make_json_safe(value.tolist())
+        except Exception:
+            return str(value)
     if hasattr(value, "get_params"):
+        try:
+            return _make_json_safe(value.get_params())
+        except Exception:
+            return str(value)
+    if hasattr(value, "__dict__"):
         return {
-            "estimator": value.__class__.__name__,
-            "parameters": value.get_params(deep=False),
+            key: _make_json_safe(val)
+            for key, val in vars(value).items()
+            if not key.startswith("_")
         }
-
     return str(value)
 
-#  Append one experiment row to the central tracking CSV
-def log_experiment(
-    *,
-    model_name: str,
-    dataset: str,
-    training_rows: int,
-    validation_rows: int,
-    metrics: dict[str, float],
-    training_time_seconds: float,
-    inference_time_ms: float,
-    artifact_path: str | Path,
-    hyperparameters: dict[str, Any] | None = None,
-    output_file: str | Path = EXPERIMENT_TRACKING_PATH,
-) -> pd.DataFrame:
 
+def log_experiment(
+    model_id=None,
+    model_name=None,
+    model_family=None,
+    features=None,
+    preprocessing=None,
+    algorithm=None,
+    dataset=None,
+    training_rows=None,
+    validation_rows=None,
+    metrics=None,
+    training_time_seconds=None,
+    inference_time_ms=None,
+    artifact_path=None,
+    hyperparameters=None,
+    output_file=None,
+):
     output_path = Path(output_file)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    serialized_hyperparameters = json.dumps(
-        hyperparameters or {},
-        default=_json_serializer,
-        sort_keys=True,
-    )
+    metrics = metrics or {}
 
-    row = pd.DataFrame(
-        [
-            {
-                "timestamp_utc": datetime.now(timezone.utc).isoformat(
-                    timespec="seconds"
-                ),
-                "model_name": model_name,
-                "dataset": dataset,
-                "training_rows": int(training_rows),
-                "validation_rows": int(validation_rows),
-                "accuracy": metrics.get("accuracy"),
-                "macro_precision": metrics.get("macro_precision"),
-                "macro_recall": metrics.get("macro_recall"),
-                "macro_f1": metrics.get("macro_f1"),
-                "weighted_f1": metrics.get("weighted_f1"),
-                "training_time_seconds": float(training_time_seconds),
-                "inference_time_ms": float(inference_time_ms),
-                "hyperparameters": serialized_hyperparameters,
-                "artifact_path": str(artifact_path),
-            }
-        ]
-    )
+    row = {
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "model_id": model_id,
+        "model_name": model_name,
+        "model_family": model_family,
+        "features": features,
+        "preprocessing": preprocessing,
+        "algorithm": algorithm,
+        "dataset": dataset,
+        "training_rows": int(training_rows) if training_rows is not None else None,
+        "validation_rows": int(validation_rows) if validation_rows is not None else None,
+        "accuracy": metrics.get("accuracy"),
+        "macro_precision": metrics.get("macro_precision"),
+        "macro_recall": metrics.get("macro_recall"),
+        "macro_f1": metrics.get("macro_f1"),
+        "weighted_precision": metrics.get("weighted_precision"),
+        "weighted_recall": metrics.get("weighted_recall"),
+        "weighted_f1": metrics.get("weighted_f1"),
+        "train_accuracy": metrics.get("train_accuracy"),
+        "training_time_seconds": training_time_seconds,
+        "inference_time_ms": inference_time_ms,
+        "artifact_path": str(artifact_path) if artifact_path else None,
+        "hyperparameters": json.dumps(_make_json_safe(hyperparameters), default=str),
+    }
 
     if output_path.exists():
-        existing = pd.read_csv(output_path)
-        result = pd.concat([existing, row], ignore_index=True)
+        existing_df = pd.read_csv(output_path)
+        new_df = pd.concat([existing_df, pd.DataFrame([row])], ignore_index=True)
     else:
-        result = row
+        new_df = pd.DataFrame([row])
 
-    result.to_csv(output_path, index=False)
-
-    return row
+    new_df.to_csv(output_path, index=False)
+    return new_df.tail(1).to_dict(orient="records")[0]
