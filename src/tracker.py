@@ -1,90 +1,69 @@
-from datetime import datetime, timezone
+"""Central CSV experiment tracking for all sentiment models."""
+
+from __future__ import annotations
 import json
+from datetime import datetime, timezone
 from pathlib import Path
-
+from typing import Any
 import pandas as pd
+from src.config import MODEL_TRACKING_PATH
 
-
-def _make_json_safe(value):
+def _json_safe(value: Any) -> Any:
     if value is None or isinstance(value, (str, int, float, bool)):
         return value
-    if isinstance(value, dict):
-        return {str(k): _make_json_safe(v) for k, v in value.items()}
-    if isinstance(value, (list, tuple, set)):
-        return [_make_json_safe(v) for v in value]
     if isinstance(value, Path):
         return str(value)
-    if hasattr(value, "tolist"):
-        try:
-            return _make_json_safe(value.tolist())
-        except Exception:
-            return str(value)
-    if hasattr(value, "get_params"):
-        try:
-            return _make_json_safe(value.get_params())
-        except Exception:
-            return str(value)
-    if hasattr(value, "__dict__"):
-        return {
-            key: _make_json_safe(val)
-            for key, val in vars(value).items()
-            if not key.startswith("_")
-        }
+    if isinstance(value, dict):
+        return {str(k): _json_safe(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple, set)):
+        return [_json_safe(v) for v in value]
+    if hasattr(value, "item"):
+        try: return value.item()
+        except (ValueError, TypeError): pass
     return str(value)
 
-
 def log_experiment(
-    model_id=None,
-    model_name=None,
-    model_family=None,
-    features=None,
-    preprocessing=None,
-    algorithm=None,
-    dataset=None,
-    training_rows=None,
-    validation_rows=None,
-    metrics=None,
-    training_time_seconds=None,
-    inference_time_ms=None,
-    artifact_path=None,
-    hyperparameters=None,
-    output_file=None,
-):
+    *, model_id: str, model_name: str, model_family: str, features: str,
+    preprocessing: str, algorithm: str, dataset: str, training_rows: int,
+    validation_rows: int, metrics: dict[str, Any], training_time_seconds: float,
+    inference_time_ms: float, artifact_path: str | Path,
+    pretrained_model: str | None = None, epochs: int | None = None,
+    batch_size: int | None = None, learning_rate: float | None = None,
+    max_length: int | None = None, hyperparameters: dict[str, Any] | None = None,
+    output_file: str | Path = MODEL_TRACKING_PATH,
+) -> pd.DataFrame:
+    """Add or replace one model experiment in the shared tracking CSV."""
     output_path = Path(output_file)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-
-    metrics = metrics or {}
-
     row = {
-        "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "model_id": model_id,
-        "model_name": model_name,
-        "model_family": model_family,
-        "features": features,
-        "preprocessing": preprocessing,
-        "algorithm": algorithm,
-        "dataset": dataset,
-        "training_rows": int(training_rows) if training_rows is not None else None,
-        "validation_rows": int(validation_rows) if validation_rows is not None else None,
-        "accuracy": metrics.get("accuracy"),
+        "model_id": model_id, "model_name": model_name,
+        "model_family": model_family, "features": features,
+        "preprocessing": preprocessing, "algorithm": algorithm,
+        "pretrained_model": pretrained_model, "dataset": dataset,
+        "training_rows": int(training_rows),
+        "validation_rows": int(validation_rows),
+        "train_accuracy": metrics.get("train_accuracy"),
+        "validation_accuracy": metrics.get("validation_accuracy", metrics.get("accuracy")),
         "macro_precision": metrics.get("macro_precision"),
         "macro_recall": metrics.get("macro_recall"),
         "macro_f1": metrics.get("macro_f1"),
-        "weighted_precision": metrics.get("weighted_precision"),
-        "weighted_recall": metrics.get("weighted_recall"),
         "weighted_f1": metrics.get("weighted_f1"),
-        "train_accuracy": metrics.get("train_accuracy"),
-        "training_time_seconds": training_time_seconds,
-        "inference_time_ms": inference_time_ms,
-        "artifact_path": str(artifact_path) if artifact_path else None,
-        "hyperparameters": json.dumps(_make_json_safe(hyperparameters), default=str),
+        "training_time_seconds": float(training_time_seconds),
+        "inference_time_ms": float(inference_time_ms),
+        "epochs": epochs, "batch_size": batch_size,
+        "learning_rate": learning_rate, "max_length": max_length,
+        "hyperparameters": json.dumps(_json_safe(hyperparameters or {}), sort_keys=True),
+        "artifact_path": str(artifact_path),
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
-
+    new_row = pd.DataFrame([row])
     if output_path.exists():
-        existing_df = pd.read_csv(output_path)
-        new_df = pd.concat([existing_df, pd.DataFrame([row])], ignore_index=True)
+        existing = pd.read_csv(output_path)
+        if "model_id" not in existing.columns:
+            existing["model_id"] = existing.get("model_name", "")
+        existing = existing[existing["model_id"].astype(str) != str(model_id)]
+        tracking = pd.concat([existing, new_row], ignore_index=True, sort=False)
     else:
-        new_df = pd.DataFrame([row])
-
-    new_df.to_csv(output_path, index=False)
-    return new_df.tail(1).to_dict(orient="records")[0]
+        tracking = new_row
+    tracking.to_csv(output_path, index=False)
+    return tracking
