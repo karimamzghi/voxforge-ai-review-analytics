@@ -212,8 +212,10 @@ def train_transformer(
         report_to="none",
         seed=config.random_state,
         data_seed=config.random_state,
-        fp16=torch.cuda.is_available() and not torch.cuda.is_bf16_supported(),
-        bf16=torch.cuda.is_available() and torch.cuda.is_bf16_supported(),
+        
+        # Disable mixed precision for DeBERTa stability
+        fp16=False,
+        bf16=False,
         dataloader_pin_memory=torch.cuda.is_available(),
     )
     signature = inspect.signature(TrainingArguments.__init__).parameters
