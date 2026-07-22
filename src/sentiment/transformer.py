@@ -305,22 +305,113 @@ def save_transformer_predictions(X, y_true, evaluation, path: str | Path) -> Pat
     frame.to_csv(output, index=False)
     return output
 
+def save_transformer_evaluation_artifacts(
+    X,
+    y_true,
+    evaluation: dict,
+    *,
+    predictions_path: str | Path,
+    classification_report_path: str | Path,
+    confusion_matrix_csv_path: str | Path,
+) -> dict[str, Path]:
+    
+    predictions_path = Path(predictions_path)
+    classification_report_path = Path(classification_report_path)
+    confusion_matrix_csv_path = Path(confusion_matrix_csv_path)
+
+    for output_path in (
+        predictions_path,
+        classification_report_path,
+        confusion_matrix_csv_path,
+    ):
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    save_transformer_predictions(
+        X=X,
+        y_true=y_true,
+        evaluation=evaluation,
+        path=predictions_path,
+    )
+
+    evaluation["classification_report"].to_csv(
+        classification_report_path,
+        index=True,
+    )
+
+    evaluation["confusion_matrix"].to_csv(
+        confusion_matrix_csv_path,
+        index=True,
+    )
+
+    saved_paths = {
+        "predictions": predictions_path,
+        "classification_report": classification_report_path,
+        "confusion_matrix_csv": confusion_matrix_csv_path,
+    }
+
+    print("Saved transformer evaluation artifacts:")
+    for artifact_name, artifact_path in saved_paths.items():
+        print(f"- {artifact_name}: {artifact_path}")
+
+    return saved_paths
+
+#   Plot and save training and validation loss from Trainer log history.
 def plot_training_history(run, path: str | Path) -> Path:
     history = pd.DataFrame(run["trainer"].state.log_history)
+
     output = Path(path)
     output.parent.mkdir(parents=True, exist_ok=True)
+
     fig, ax = plt.subplots(figsize=(8, 5))
-    if "loss" in history:
+    plotted = False
+
+    if "loss" in history.columns:
         train_rows = history.dropna(subset=["loss"])
-        ax.plot(train_rows["epoch"], train_rows["loss"], label="train loss")
-    if "eval_loss" in history:
-        eval_rows = history.dropna(subset=["eval_loss"])
-        ax.plot(eval_rows["epoch"], eval_rows["eval_loss"], label="validation loss")
+
+        if not train_rows.empty:
+            ax.plot(
+                train_rows["epoch"],
+                train_rows["loss"],
+                label="training loss",
+            )
+            plotted = True
+
+    if "eval_loss" in history.columns:
+        validation_rows = history.dropna(subset=["eval_loss"])
+
+        if not validation_rows.empty:
+            ax.plot(
+                validation_rows["epoch"],
+                validation_rows["eval_loss"],
+                label="validation loss",
+            )
+            plotted = True
+
     ax.set_title(f"{run['config'].model_name} Training History")
     ax.set_xlabel("Epoch")
     ax.set_ylabel("Loss")
-    ax.legend()
+
+    if plotted:
+        ax.legend()
+    else:
+        ax.text(
+            0.5,
+            0.5,
+            "No loss values were found in Trainer history.",
+            horizontalalignment="center",
+            verticalalignment="center",
+            transform=ax.transAxes,
+        )
+
     fig.tight_layout()
-    fig.savefig(output, dpi=200, bbox_inches="tight")
+    fig.savefig(
+        output,
+        dpi=200,
+        bbox_inches="tight",
+    )
     plt.show()
+    plt.close(fig)
+
+    print(f"Training history saved to: {output}")
+
     return output
