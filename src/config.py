@@ -198,8 +198,6 @@ REPORTS_DIR = ARTIFACTS_DIR / "reports"
 # General
 # =============================================================================
 
-RANDOM_STATE = 42
-
 SENTIMENT_LABELS = [
     "negative",
     "neutral",
@@ -252,6 +250,7 @@ create_project_directories()
 # ------------------------------------------------------------------
 # Topic clustering configuration
 # ------------------------------------------------------------------
+RANDOM_STATE = 42
 
 CLUSTER_TEXT_COLUMN = "classical_text"
 DEFAULT_CLUSTER_COUNTS = tuple(range(2, 11))

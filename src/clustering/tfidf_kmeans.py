@@ -37,26 +37,30 @@ from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import Normalizer
 
 from src.config import (
-    CLUSTERED_REVIEWS_PATH,
-    CLUSTERING_MODELS_DIR,
-    CLUSTERING_RESULTS_DIR,
-    ENRICHED_REVIEWS_PATH,
-    create_project_directories,
     DEFAULT_CLUSTER_COUNTS,
     DEFAULT_N_CLUSTERS,
-    DEFAULT_TOP_N_TERMS,
     DEFAULT_REVIEWS_PER_CLUSTER,
+    DEFAULT_TOP_N_TERMS,
+    DOMAIN_STOP_WORDS,
+    KMEANS_N_INIT,
+    RANDOM_STATE,
+    SILHOUETTE_SAMPLE_SIZE,
+    SVD_COMPONENTS,
+    TFIDF_MAX_DF,
     TFIDF_MAX_FEATURES,
     TFIDF_MIN_DF,
-    TFIDF_MAX_DF,
     TFIDF_NGRAM_RANGE,
     TFIDF_SUBLINEAR_TF,
-    SVD_COMPONENTS,
-    KMEANS_N_INIT,
-    SILHOUETTE_SAMPLE_SIZE,
-    DOMAIN_STOP_WORDS,
 )
 
+from src.config import (
+    DEFAULT_CLUSTER_COUNTS,
+    DEFAULT_N_CLUSTERS,
+    RANDOM_STATE,
+    SVD_COMPONENTS,
+)
+
+RANDOM_STATE = 42
 
 def _prepare_texts(texts: Sequence[str] | pd.Series) -> pd.Series:
     """Return a clean, index-reset text series suitable for vectorization."""
