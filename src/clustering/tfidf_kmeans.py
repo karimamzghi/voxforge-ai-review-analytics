@@ -58,7 +58,13 @@ from src.config import (
     DEFAULT_N_CLUSTERS,
     RANDOM_STATE,
     SVD_COMPONENTS,
+    RATING_WORDS,
+    COMMERCE_FILLER,
+    GENERIC_PRAISE
+
 )
+
+from src.clustering.labeling import build_stop_words
 
 RANDOM_STATE = 42
 
@@ -73,6 +79,10 @@ def _prepare_texts(texts: Sequence[str] | pd.Series) -> pd.Series:
         raise ValueError("All review texts are empty after cleaning.")
 
     return prepared
+
+DOMAIN_STOP_WORDS = build_stop_words(
+    extra=RATING_WORDS + COMMERCE_FILLER
+)
 
 
 def build_clustering_stop_words(

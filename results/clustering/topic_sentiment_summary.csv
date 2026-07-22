@@ -1,19 +1,19 @@
 topic_name,sentiment_label,review_count,topic_review_count,sentiment_percentage
-Batteries,positive,4181,4362,95.85
-Batteries,neutral,106,4362,2.43
-Batteries,negative,75,4362,1.72
-Ease of Use,positive,5358,5631,95.15
-Ease of Use,neutral,189,5631,3.36
-Ease of Use,negative,84,5631,1.49
-Echo & Alexa Devices,positive,4608,5573,82.68
-Echo & Alexa Devices,negative,683,5573,12.26
-Echo & Alexa Devices,neutral,282,5573,5.06
-Fire Tablets,positive,5234,5519,94.84
-Fire Tablets,neutral,161,5519,2.92
-Fire Tablets,negative,124,5519,2.25
-"Kindle, Fire TV & General Product Praise",positive,15637,17187,90.98
-"Kindle, Fire TV & General Product Praise",neutral,855,17187,4.97
-"Kindle, Fire TV & General Product Praise",negative,695,17187,4.04
-Rating-Only Reviews,positive,8345,9004,92.68
-Rating-Only Reviews,neutral,479,9004,5.32
-Rating-Only Reviews,negative,180,9004,2.0
+topic_0,positive,5161,5456,94.59
+topic_0,neutral,162,5456,2.97
+topic_0,negative,133,5456,2.44
+topic_1,positive,7793,8466,92.05
+topic_1,neutral,478,8466,5.65
+topic_1,negative,195,8466,2.3
+topic_2,positive,4607,5561,82.84
+topic_2,negative,679,5561,12.21
+topic_2,neutral,275,5561,4.95
+topic_3,positive,5527,5807,95.18
+topic_3,neutral,197,5807,3.39
+topic_3,negative,83,5807,1.43
+topic_4,positive,16403,18032,90.97
+topic_4,neutral,897,18032,4.97
+topic_4,negative,732,18032,4.06
+topic_5,positive,3872,3954,97.93
+topic_5,neutral,63,3954,1.59
+topic_5,negative,19,3954,0.48

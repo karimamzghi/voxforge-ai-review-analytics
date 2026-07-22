@@ -268,17 +268,21 @@ SVD_COMPONENTS = 100
 KMEANS_N_INIT = 20
 SILHOUETTE_SAMPLE_SIZE = 10_000
 
-DOMAIN_STOP_WORDS = frozenset(
-    {
-        "star",
-        "stars",
-        "rating",
-        "ratings",
-        "rated",
-        "five",
-        "four",
-        "three",
-        "two",
-        "one",
-    }
-)
+RATING_WORDS = [
+    "star", "stars", "rating", "ratings", "rated",
+    "one", "two", "three", "four", "five",
+    "review", "reviews",
+]
+
+COMMERCE_FILLER = [
+    "amazon", "product", "products", "item", "items", "thing", "things",
+    "purchase", "purchased", "order", "ordered", "buy", "bought", "buying",
+    "price", "priced", "seller", "company",
+]
+
+GENERIC_PRAISE = [
+    "great", "good", "love", "loved", "like", "liked", "nice", "best",
+    "excellent", "awesome", "amazing", "perfect", "happy", "easy",
+    "really", "very", "just", "would", "recommend", "highly", "definitely",
+    "get", "got", "use", "used", "using", "work", "works", "worked",
+]
