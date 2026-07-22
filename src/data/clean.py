@@ -27,27 +27,36 @@ import pandas as pd
 
 
 COLUMN_MAPPING: dict[str, str] = {
-    "reviews.text": "review_text",
+    "name": "product_name",
+    "brand": "brand",
+    "categories": "categories",
+    "primaryCategories": "primary_categories",
     "reviews.title": "review_title",
+    "reviews.text": "review_text",
     "reviews.rating": "rating",
     "reviews.date": "review_date",
-    "reviews.dateAdded": "review_date_added",
-    "reviews.dateSeen": "review_date_seen",
-    "reviews.didPurchase": "did_purchase",
-    "reviews.doRecommend": "do_recommend",
-    "reviews.numHelpful": "num_helpful",
-    "reviews.username": "username",
-    "reviews.userCity": "user_city",
-    "reviews.userProvince": "user_province",
-    "reviews.id": "review_id",
+
 }
 
-
 DEFAULT_DROP_COLUMNS: tuple[str, ...] = (
-    "user_city",
-    "user_province",
-    "did_purchase",
-    "review_id",
+    "reviews.username",
+    "reviews.userCity",       # 100% null
+    "reviews.userProvince",   # 100% null
+    "reviews.didPurchase",    # 10 non-null
+    "reviews.id",             # 71 non-null
+    "id",                     # 71 non-null
+    "keys",                   # barcode / external-key junk
+    "manufacturer",           # redundant with `brand` (both "Amazon")
+    "reviews.sourceURLs",     # scraper URLs
+    "sourceURLs",             # duplicate of above, one source only
+    "reviews.dateAdded",      # scraper timestamp, 63% missing
+    "dateAdded",              # duplicate, one source only
+    "dateUpdated",            # scraper metadata, one source
+    "reviews.dateSeen",       # concatenated scrape timestamps
+    "imageURLs",              # scraper metadata (keep only for UI thumbnails)
+    "manufacturerNumber",     # not needed
+    "reviews.doRecommend",
+    "reviews.numHelpful",
 )
 
 

@@ -32,7 +32,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
-from src.voxforge.data.clean import normalize_text_minimally
+from src.data.clean import normalize_text_minimally
 
 
 NLTK_RESOURCES: dict[str, str] = {
@@ -175,8 +175,6 @@ def preprocess_classical_text(
     stop_words: set[str] | None = None,
 ) -> str:
 
-    ensure_nltk_resources()
-
     cleaned_text = clean_text_for_classical_model(text)
 
     if not cleaned_text:
@@ -233,7 +231,7 @@ def create_model_text_features(
     # Minimal representation for transformer tokenizers.
     processed[transformer_column] = processed[normalized_column]
 
-    # More aggressive representation for TF-IDF / Bag-of-Words models.
+    # More aggressive representation for TF-IDF 
     stop_words = get_sentiment_stop_words()
     processed[classical_column] = processed[normalized_column].apply(
         lambda value: preprocess_classical_text(
