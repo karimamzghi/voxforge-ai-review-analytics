@@ -11,3 +11,4 @@ sentencepiece>=0.2
 safetensors>=0.4
 # Optional: only needed for 4-bit QLoRA on supported hardware
 bitsandbytes>=0.43; platform_system != "Darwin"
+tabulate>=0.9

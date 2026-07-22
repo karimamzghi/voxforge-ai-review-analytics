@@ -53,6 +53,9 @@ class TransformerExperimentConfig:
     lora_target_modules: tuple[str, ...] = ()
     random_state: int = RANDOM_STATE
     early_stopping_patience: int = 2
+    use_class_weights: bool = True
+    use_fp16: bool = False
+    use_bf16: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         data = asdict(self)
@@ -213,9 +216,8 @@ def train_transformer(
         seed=config.random_state,
         data_seed=config.random_state,
         
-        # Disable mixed precision for DeBERTa stability
-        fp16=False,
-        bf16=False,
+        fp16=config.use_fp16,
+        bf16=config.use_bf16,
         dataloader_pin_memory=torch.cuda.is_available(),
     )
     signature = inspect.signature(TrainingArguments.__init__).parameters
@@ -241,7 +243,10 @@ def train_transformer(
     else:
         trainer_kwargs["tokenizer"] = tokenizer
     trainer = WeightedTrainer(**trainer_kwargs)
-    trainer.class_weights = torch.tensor(class_weights, dtype=torch.float32)
+    trainer.class_weights = (
+        torch.tensor(class_weights, dtype=torch.float32)
+        if config.use_class_weights else None
+    )
 
     start = time.perf_counter()
     train_result = trainer.train()
