@@ -53,8 +53,14 @@ DISTILBERT_MODEL_DIR = (
     SENTIMENT_MODELS_DIR / "distilbert_sentiment"
 )
 
+# Advanced transformer models
 DEBERTA_MODEL_DIR = (
     SENTIMENT_MODELS_DIR / "deberta_v3_sentiment"
+)
+
+# Clutering
+TFIDF_SVD_KMEANS_MODEL_PATH = (
+    CLUSTERING_MODELS_DIR / "tfidf_svd_kmeans.joblib"
 )
 
 # =============================================================================
@@ -242,3 +248,38 @@ def create_project_directories() -> None:
 
 
 create_project_directories()
+
+# ------------------------------------------------------------------
+# Topic clustering configuration
+# ------------------------------------------------------------------
+
+CLUSTER_TEXT_COLUMN = "classical_text"
+DEFAULT_CLUSTER_COUNTS = tuple(range(2, 11))
+DEFAULT_N_CLUSTERS = 6
+DEFAULT_TOP_N_TERMS = 12
+DEFAULT_REVIEWS_PER_CLUSTER = 5
+
+TFIDF_MAX_FEATURES = 10_000
+TFIDF_MIN_DF = 5
+TFIDF_MAX_DF = 0.85
+TFIDF_NGRAM_RANGE = (1, 2)
+TFIDF_SUBLINEAR_TF = True
+
+SVD_COMPONENTS = 100
+KMEANS_N_INIT = 20
+SILHOUETTE_SAMPLE_SIZE = 10_000
+
+DOMAIN_STOP_WORDS = frozenset(
+    {
+        "star",
+        "stars",
+        "rating",
+        "ratings",
+        "rated",
+        "five",
+        "four",
+        "three",
+        "two",
+        "one",
+    }
+)
