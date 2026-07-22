@@ -166,14 +166,44 @@ def _compute_metrics(eval_prediction):
     }
 
 class WeightedTrainerMixin:
+    """Trainer mixin that applies optional balanced class weights safely.
+
+    The loss is calculated in float32 even when the model uses fp16/bf16.
+    This prevents dtype errors such as:
+    "expected scalar type Half but found Float".
+    """
+
     class_weights: torch.Tensor | None = None
 
-    def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
-        labels = inputs.pop("labels")
+    def compute_loss(
+        self,
+        model,
+        inputs,
+        return_outputs: bool = False,
+        **kwargs,
+    ):
+        labels = inputs.pop("labels").long()
         outputs = model(**inputs)
         logits = outputs.get("logits")
-        weights = self.class_weights.to(logits.device) if self.class_weights is not None else None
-        loss = nn.CrossEntropyLoss(weight=weights)(logits, labels)
+
+        if logits is None:
+            raise RuntimeError("The model output does not contain 'logits'.")
+
+        # Calculate cross-entropy in float32 for numerical stability.
+        loss_logits = logits.float()
+
+        weights = None
+        if self.class_weights is not None:
+            weights = self.class_weights.to(
+                device=loss_logits.device,
+                dtype=loss_logits.dtype,
+            )
+
+        loss = nn.CrossEntropyLoss(weight=weights)(
+            loss_logits,
+            labels.to(loss_logits.device),
+        )
+
         return (loss, outputs) if return_outputs else loss
 
 def train_transformer(
@@ -184,6 +214,18 @@ def train_transformer(
         DataCollatorWithPadding, EarlyStoppingCallback, Trainer, TrainingArguments, set_seed,
     )
     set_seed(config.random_state)
+
+    if config.use_fp16 and config.use_bf16:
+        raise ValueError("Enable only one of use_fp16 or use_bf16, not both.")
+
+    if config.use_fp16 and not torch.cuda.is_available():
+        print("FP16 requested without a CUDA GPU; using float32 instead.")
+
+    if config.use_bf16 and not (
+        torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+    ):
+        print("BF16 requested but unsupported; using float32 instead.")
+
     tokenizer, model, using_4bit = build_tokenizer_and_model(config)
     train_dataset = SentimentDataset(X_train, y_train, tokenizer, config.max_length)
     val_dataset = SentimentDataset(X_val, y_val, tokenizer, config.max_length)
@@ -216,8 +258,14 @@ def train_transformer(
         seed=config.random_state,
         data_seed=config.random_state,
         
-        fp16=config.use_fp16,
-        bf16=config.use_bf16,
+        # Mixed precision is controlled by the experiment config.
+        # fp16 and bf16 must not both be enabled.
+        fp16=bool(config.use_fp16 and torch.cuda.is_available()),
+        bf16=bool(
+            config.use_bf16
+            and torch.cuda.is_available()
+            and torch.cuda.is_bf16_supported()
+        ),
         dataloader_pin_memory=torch.cuda.is_available(),
     )
     signature = inspect.signature(TrainingArguments.__init__).parameters
@@ -266,7 +314,10 @@ def evaluate_trained_transformer(run, X, y_true, *, confusion_matrix_path=None):
     elapsed = time.perf_counter() - start
     pred_ids = np.argmax(output.predictions, axis=-1)
     predictions = np.array([ID_TO_LABEL[int(i)] for i in pred_ids])
-    probabilities = torch.softmax(torch.tensor(output.predictions), dim=-1).numpy()
+    probabilities = torch.softmax(
+        torch.as_tensor(output.predictions, dtype=torch.float32),
+        dim=-1,
+    ).cpu().numpy()
     metrics = calculate_classification_metrics(y_true, predictions)
     report = create_classification_report(y_true, predictions, labels=SENTIMENT_LABELS)
     matrix = create_confusion_matrix_dataframe(y_true, predictions, labels=SENTIMENT_LABELS)
@@ -308,52 +359,64 @@ def save_transformer_predictions(X, y_true, evaluation, path: str | Path) -> Pat
 def save_transformer_evaluation_artifacts(
     X,
     y_true,
-    evaluation: dict,
-    *,
-    predictions_path: str | Path,
-    classification_report_path: str | Path,
-    confusion_matrix_csv_path: str | Path,
-) -> dict[str, Path]:
-    
+    evaluation,
+    predictions_path,
+    classification_report_path,
+    confusion_matrix_csv_path,
+):
+
     predictions_path = Path(predictions_path)
     classification_report_path = Path(classification_report_path)
     confusion_matrix_csv_path = Path(confusion_matrix_csv_path)
 
-    for output_path in (
+    predictions_path.parent.mkdir(parents=True, exist_ok=True)
+    classification_report_path.parent.mkdir(parents=True, exist_ok=True)
+    confusion_matrix_csv_path.parent.mkdir(parents=True, exist_ok=True)
+
+    predictions_df = pd.DataFrame(
+        {
+            "text": pd.Series(X).reset_index(drop=True),
+            "true_label": pd.Series(y_true).reset_index(drop=True),
+            "predicted_label": pd.Series(
+                evaluation["predictions"]
+            ).reset_index(drop=True),
+        }
+    )
+
+    predictions_df.to_csv(
         predictions_path,
+        index=False,
+    )
+
+    classification_report = evaluation["classification_report"]
+
+    if isinstance(classification_report, pd.DataFrame):
+        classification_report_df = classification_report
+    else:
+        classification_report_df = pd.DataFrame(
+            classification_report
+        ).transpose()
+
+    classification_report_df.to_csv(
         classification_report_path,
+    )
+
+    confusion_matrix = evaluation["confusion_matrix"]
+
+    if isinstance(confusion_matrix, pd.DataFrame):
+        confusion_matrix_df = confusion_matrix
+    else:
+        confusion_matrix_df = pd.DataFrame(confusion_matrix)
+
+    confusion_matrix_df.to_csv(
         confusion_matrix_csv_path,
-    ):
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-
-    save_transformer_predictions(
-        X=X,
-        y_true=y_true,
-        evaluation=evaluation,
-        path=predictions_path,
     )
 
-    evaluation["classification_report"].to_csv(
-        classification_report_path,
-        index=True,
-    )
-
-    evaluation["confusion_matrix"].to_csv(
-        confusion_matrix_csv_path,
-        index=True,
-    )
-
-    saved_paths = {
+    return {
         "predictions": predictions_path,
         "classification_report": classification_report_path,
         "confusion_matrix_csv": confusion_matrix_csv_path,
     }
-
-    print("Saved transformer evaluation artifacts:")
-    for artifact_name, artifact_path in saved_paths.items():
-        print(f"- {artifact_name}: {artifact_path}")
-
-    return saved_paths
 
 #   Plot and save training and validation loss from Trainer log history.
 def plot_training_history(run, path: str | Path) -> Path:
