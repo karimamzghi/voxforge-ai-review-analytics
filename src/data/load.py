@@ -2,7 +2,7 @@ import pandas as pd
 import logging
 
 from pathlib import Path
-from .config import RAW_FILES
+from src.config import RAW_FILES
 
 
 # Configure logger

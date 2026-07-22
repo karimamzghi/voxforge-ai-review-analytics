@@ -228,6 +228,36 @@ def convert_date_columns(
     return cleaned
 
 
+# Convert Amazon star ratings into three sentiment classes.
+def create_sentiment_label(rating: int) -> str:
+
+    if rating <= 2:
+        return "negative"
+
+    if rating == 3:
+        return "neutral"
+
+    return "positive"
+
+# Add sentiment labels derived from Amazon star ratings.
+def add_sentiment_labels(
+    df: pd.DataFrame,
+    rating_column: str = "rating",
+    output_column: str = "sentiment_label",
+) -> pd.DataFrame:
+
+    if rating_column not in df.columns:
+        raise KeyError(f"Column '{rating_column}' is required.")
+
+    cleaned = df.copy()
+
+    cleaned[output_column] = cleaned[rating_column].apply(
+        create_sentiment_label
+    )
+
+    return cleaned
+
+
 #   Remove rows whose review body is empty after minimal normalization.
 def remove_empty_reviews(df: pd.DataFrame) -> pd.DataFrame:
  
@@ -254,6 +284,7 @@ def validate_clean_dataset(df: pd.DataFrame) -> None:
 
     required_columns = {"review_text", "review_title", "rating"}
     missing_columns = required_columns.difference(df.columns)
+    expected_labels = {"negative", "neutral", "positive"}
 
     assert not missing_columns, (
         "Missing required cleaned columns: "
@@ -271,6 +302,7 @@ def validate_clean_dataset(df: pd.DataFrame) -> None:
     assert df.duplicated().sum() == 0, (
         "Exact duplicate rows remain in the cleaned dataset."
     )
+    assert set(df["sentiment_label"].unique()) <= expected_labels
 
 
 #   Run the complete model-agnostic cleaning pipeline.
@@ -282,6 +314,7 @@ def clean_dataset(df: pd.DataFrame) -> pd.DataFrame:
     cleaned = clean_review_text(cleaned)
     cleaned = clean_review_titles(cleaned)
     cleaned = validate_ratings(cleaned)
+    cleaned = add_sentiment_labels(cleaned)
     cleaned = convert_date_columns(cleaned)
     cleaned = remove_empty_reviews(cleaned)
     cleaned = remove_exact_duplicates(cleaned)
