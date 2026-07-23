@@ -30,6 +30,7 @@ from typing import Mapping, Sequence
 
 import pandas as pd
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
+from src.config import DOMAIN_STOP_WORDS
 
 # ─────────────────────────────────────────────────────────────────────────────
 # FEATURE TIME — stop words (step 2)
@@ -38,20 +39,14 @@ from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 # Rating-word leakage: review titles like "five star", "four star" collapse into
 # near-duplicate fragments ("five star excelente") that dominate a whole cluster.
 # Dropping these tokens forces the model to cluster on the actual product content.
-DOMAIN_STOP_WORDS: frozenset[str] = frozenset({
-    "star", "stars", "rating", "rated", "review", "reviews",
-    "one", "two", "three", "four", "five",
-    "amazon",  # brand appears in almost every review, so it carries no signal
-})
 
-# Generic praise/filler words. NOT stop-worded by default (they are legitimate
-# sentiment content), but used below to detect low-information "catch-all" clusters.
+# Generic praise/filler words. NOT stop-worded (they are legitimate sentiment
+# content), but used to detect low-information "catch-all" clusters.
 GENERIC_TERMS: frozenset[str] = frozenset({
     "great", "good", "love", "loved", "nice", "well", "best", "excellent",
     "product", "products", "price", "buy", "bought", "use", "used", "using",
     "work", "works", "worked", "easy", "get", "got", "really", "would", "like",
 })
-
 
 def build_stop_words(extra: Sequence[str] | None = None) -> list[str]:
     """Return English + domain stop words for the ``TfidfVectorizer``.
@@ -64,6 +59,41 @@ def build_stop_words(extra: Sequence[str] | None = None) -> list[str]:
     if extra:
         words |= {w.lower() for w in extra}
     return sorted(words)
+
+
+def drop_low_content_reviews(
+    reviews: "pd.DataFrame | pd.Series",
+    text_column: str = "classical_text",
+    *,
+    min_tokens: int = 3,
+    stop_words: Sequence[str] | None = None,
+    verbose: bool = True,
+) -> "pd.DataFrame | pd.Series":
+    """Drop reviews with too few meaningful tokens (after stop words).
+
+    Rating-only fragments like "five star ordered" have almost no content once
+    stop words are removed, so they collapse into one near-empty catch-all cluster.
+    Removing them before clustering shrinks that catch-all and sharpens the
+    remaining product categories.
+
+    Accepts a DataFrame (filtered on ``text_column``) or a Series, and returns the
+    same type with the index reset. Run it once, right after you build
+    ``model_data`` and before clustering.
+    """
+    stops = set(stop_words) if stop_words is not None else set(build_stop_words())
+
+    def _n_meaningful(text: object) -> int:
+        return sum(1 for tok in str(text).lower().split() if tok and tok not in stops)
+
+    source = reviews if isinstance(reviews, pd.Series) else reviews[text_column]
+    keep = source.map(_n_meaningful) >= min_tokens
+    kept = reviews[keep].reset_index(drop=True)
+
+    if verbose:
+        before, after = len(reviews), len(kept)
+        print(f"Kept {after:,} of {before:,} reviews "
+              f"({before - after:,} low-content fragments dropped)")
+    return kept
 
 
 # ─────────────────────────────────────────────────────────────────────────────

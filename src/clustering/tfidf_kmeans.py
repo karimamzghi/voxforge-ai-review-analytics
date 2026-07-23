@@ -80,10 +80,6 @@ def _prepare_texts(texts: Sequence[str] | pd.Series) -> pd.Series:
 
     return prepared
 
-DOMAIN_STOP_WORDS = build_stop_words(
-    extra=RATING_WORDS + COMMERCE_FILLER
-)
-
 
 def build_clustering_stop_words(
     extra_stop_words: Iterable[str] | None = None,

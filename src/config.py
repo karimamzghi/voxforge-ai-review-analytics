@@ -268,6 +268,17 @@ SVD_COMPONENTS = 100
 KMEANS_N_INIT = 20
 SILHOUETTE_SAMPLE_SIZE = 10_000
 
+DOMAIN_STOP_WORDS = frozenset({
+    # rating-word leakage
+    "star", "stars", "rating", "ratings", "rated",
+    "one", "two", "three", "four", "five", "review", "reviews",
+    "one star", "one stars", "two star", "two stars", "three star", "three stars",
+    "four star", "four stars", "five star", "five stars"
+    # ubiquitous commerce filler
+    "amazon", "product", "products", "item", "items",
+    "purchase", "purchased", "order", "ordered", "buy", "bought", "price", "seller",
+})
+
 RATING_WORDS = [
     "star", "stars", "rating", "ratings", "rated",
     "one", "two", "three", "four", "five",

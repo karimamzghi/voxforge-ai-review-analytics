@@ -1,19 +1,19 @@
 topic_name,sentiment_label,review_count,topic_review_count,sentiment_percentage
-topic_0,positive,5161,5456,94.59
-topic_0,neutral,162,5456,2.97
-topic_0,negative,133,5456,2.44
-topic_1,positive,7793,8466,92.05
-topic_1,neutral,478,8466,5.65
-topic_1,negative,195,8466,2.3
-topic_2,positive,4607,5561,82.84
-topic_2,negative,679,5561,12.21
-topic_2,neutral,275,5561,4.95
-topic_3,positive,5527,5807,95.18
-topic_3,neutral,197,5807,3.39
-topic_3,negative,83,5807,1.43
-topic_4,positive,16403,18032,90.97
-topic_4,neutral,897,18032,4.97
-topic_4,negative,732,18032,4.06
-topic_5,positive,3872,3954,97.93
-topic_5,neutral,63,3954,1.59
-topic_5,negative,19,3954,0.48
+Batteries,positive,4475,5420,82.56
+Batteries,negative,676,5420,12.47
+Batteries,neutral,269,5420,4.96
+Echo & Alexa Devices,positive,5512,5788,95.23
+Echo & Alexa Devices,neutral,195,5788,3.37
+Echo & Alexa Devices,negative,81,5788,1.4
+Fire TV & Streaming,positive,14968,16432,91.09
+Fire TV & Streaming,neutral,819,16432,4.98
+Fire TV & Streaming,negative,645,16432,3.93
+Fire Tablets,positive,7772,8437,92.12
+Fire Tablets,neutral,477,8437,5.65
+Fire Tablets,negative,188,8437,2.23
+General / uncategorized,positive,3775,3853,97.98
+General / uncategorized,neutral,59,3853,1.53
+General / uncategorized,negative,19,3853,0.49
+Kindle E-Readers & Books,positive,5136,5427,94.64
+Kindle E-Readers & Books,neutral,163,5427,3.0
+Kindle E-Readers & Books,negative,128,5427,2.36
