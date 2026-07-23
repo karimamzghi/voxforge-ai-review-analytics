@@ -1,0 +1,77 @@
+{
+  "metrics": [
+    {"label": "Reviews analysed", "value": "47,276", "detail": "Cleaned and enriched reviews"},
+    {"label": "Sentiment accuracy", "value": "95.1%", "detail": "Production DistilBERT model"},
+    {"label": "Topics discovered", "value": "6", "detail": "Interpretable customer themes"},
+    {"label": "Positive sentiment", "value": "94.8%", "detail": "Across the review corpus"}
+  ],
+  "overall_sentiment": {"positive": 94.8, "neutral": 1.7, "negative": 3.5},
+  "topics": [
+    {
+      "id": 0,
+      "name": "General Product Praise",
+      "description": "Broad satisfaction and low-information positive feedback.",
+      "review_count": 17187,
+      "sentiment": {"positive": 96.1, "neutral": 1.5, "negative": 2.4},
+      "keywords": ["great", "good", "love", "price", "works"],
+      "representative_reviews": ["Great product and a very good value.", "Works as expected and arrived quickly.", "Good quality for the price."],
+      "recommendation": "Treat this segment as general satisfaction and focus deeper analysis on product-specific clusters."
+    },
+    {
+      "id": 1,
+      "name": "Fire Tablets",
+      "description": "Customer experience with Fire tablets, apps, screens and family use.",
+      "review_count": 9004,
+      "sentiment": {"positive": 94.3, "neutral": 2.0, "negative": 3.7},
+      "keywords": ["tablet", "fire", "apps", "screen", "kids"],
+      "representative_reviews": ["A great tablet for my kids.", "The screen is clear and setup was easy.", "Good budget tablet for everyday use."],
+      "recommendation": "Improve app discoverability and communicate family features more clearly."
+    },
+    {
+      "id": 2,
+      "name": "Kindle E-readers",
+      "description": "Reading experience, books, display quality and portability.",
+      "review_count": 5519,
+      "sentiment": {"positive": 96.8, "neutral": 1.2, "negative": 2.0},
+      "keywords": ["kindle", "book", "reader", "reading", "screen"],
+      "representative_reviews": ["Reading is comfortable even at night.", "I carry hundreds of books everywhere.", "The display feels close to paper."],
+      "recommendation": "Continue emphasizing portability, display comfort and long reading sessions."
+    },
+    {
+      "id": 3,
+      "name": "Batteries",
+      "description": "Battery longevity, value, reliability and repeat purchases.",
+      "review_count": 5573,
+      "sentiment": {"positive": 85.9, "neutral": 1.8, "negative": 12.3},
+      "keywords": ["battery", "batteries", "life", "brand", "long"],
+      "representative_reviews": ["The batteries did not last as long as expected.", "Good value for a large pack.", "Several batteries arrived with low charge."],
+      "recommendation": "Prioritize battery consistency, shelf-life testing and clearer performance expectations."
+    },
+    {
+      "id": 4,
+      "name": "Echo & Alexa",
+      "description": "Voice assistance, music, smart-home setup and connectivity.",
+      "review_count": 5631,
+      "sentiment": {"positive": 93.7, "neutral": 1.9, "negative": 4.4},
+      "keywords": ["echo", "alexa", "music", "speaker", "voice"],
+      "representative_reviews": ["Alexa makes music and timers effortless.", "Setup was simple and the speaker sounds good.", "Voice recognition sometimes misses commands."],
+      "recommendation": "Improve setup guidance and voice-recognition reliability in noisy rooms."
+    },
+    {
+      "id": 5,
+      "name": "Everyday Product Value",
+      "description": "General comments about value, quality and daily usefulness.",
+      "review_count": 4362,
+      "sentiment": {"positive": 95.9, "neutral": 1.4, "negative": 2.7},
+      "keywords": ["product", "quality", "price", "recommend", "buy"],
+      "representative_reviews": ["A reliable product at a fair price.", "I would buy this again.", "Simple, useful and good quality."],
+      "recommendation": "Use this segment to support value-focused messaging while preserving product-specific analysis elsewhere."
+    }
+  ],
+  "recommendations": [
+    {"id": 1, "title": "Investigate battery reliability", "priority": "High", "topic": "Batteries", "evidence": "12.3% negative sentiment, the highest topic-level rate.", "action": "Review supplier quality, shelf-life testing and customer expectations."},
+    {"id": 2, "title": "Improve Alexa setup guidance", "priority": "Medium", "topic": "Echo & Alexa", "evidence": "Connectivity and voice recognition appear in representative complaints.", "action": "Simplify onboarding and add troubleshooting prompts in the companion app."},
+    {"id": 3, "title": "Separate generic praise", "priority": "Medium", "topic": "General Product Praise", "evidence": "More than one third of reviews provide little product-specific information.", "action": "Label generic feedback explicitly and prioritize actionable clusters in reporting."}
+  ],
+  "executive_summary": "Customer satisfaction is very high across the Amazon review corpus, but topic-level analysis reveals meaningful differences hidden by the overall positive average. Kindle and Fire Tablet reviews are strongly positive, while Batteries have the highest negative sentiment rate. The strongest immediate opportunity is to investigate battery reliability and customer expectations, followed by setup and recognition improvements for Echo and Alexa devices."
+}

@@ -1,0 +1,4 @@
+const steps = ["Raw Amazon reviews", "Cleaning & preprocessing", "DistilBERT sentiment", "TF-IDF vectors", "TruncatedSVD", "K-Means topics", "Topic naming", "Business insights", "FastAPI", "React dashboard"];
+export function ArchitecturePage() {
+  return <div><h1 className="text-3xl font-bold text-white">Architecture</h1><p className="mt-2 text-slate-400">A simple batch-first architecture designed for reproducibility and serverless deployment.</p><div className="mt-8 grid gap-3 md:grid-cols-2">{steps.map((step, index) => <div key={step} className="card flex items-center gap-4 p-5"><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-forgeBlue to-forgeOrange text-sm font-black text-ink">{index + 1}</span><p className="font-medium text-white">{step}</p></div>)}</div></div>;
+}
