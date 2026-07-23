@@ -1,7 +1,11 @@
+export type Priority = "High" | "Medium" | "Low" | string;
+
 export type SentimentBreakdown = {
   positive: number;
   neutral: number;
   negative: number;
+  dominant?: string;
+  health?: string;
 };
 
 export type Metric = {
@@ -15,6 +19,7 @@ export type Topic = {
   name: string;
   description: string;
   review_count: number;
+  review_share_percent: number;
   sentiment: SentimentBreakdown;
   keywords: string[];
   representative_reviews: string[];
@@ -24,10 +29,11 @@ export type Topic = {
 export type Recommendation = {
   id: number;
   title: string;
-  priority: "High" | "Medium" | "Low" | string;
+  priority: Priority;
   topic: string;
   evidence: string;
   action: string;
+  severity?: number;
 };
 
 export type DashboardData = {
@@ -36,4 +42,13 @@ export type DashboardData = {
   topics: Topic[];
   recommendations: Recommendation[];
   executive_summary: string;
+};
+
+export type ExecutiveReport = {
+  generated_at?: string;
+  executive_summary: string;
+  key_findings: string[];
+  business_risks: string[];
+  business_opportunities: string[];
+  recommendations: Recommendation[];
 };

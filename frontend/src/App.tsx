@@ -1,10 +1,11 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import { AppShell } from "./layout/AppShell";
 import { AboutPage } from "./pages/AboutPage";
 import { ArchitecturePage } from "./pages/ArchitecturePage";
 import { DashboardPage } from "./pages/DashboardPage";
-import { ExecutiveReportPage } from "./pages/ExecutiveReportPage";
 import { RecommendationsPage } from "./pages/RecommendationsPage";
+import { ReportPage } from "./pages/ReportPage";
 import { TopicDetailPage } from "./pages/TopicDetailPage";
 import { TopicsPage } from "./pages/TopicsPage";
 
@@ -16,8 +17,11 @@ export default function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/topics" element={<TopicsPage />} />
           <Route path="/topics/:id" element={<TopicDetailPage />} />
-          <Route path="/recommendations" element={<RecommendationsPage />} />
-          <Route path="/report" element={<ExecutiveReportPage />} />
+          <Route
+            path="/recommendations"
+            element={<RecommendationsPage />}
+          />
+          <Route path="/report" element={<ReportPage />} />
           <Route path="/architecture" element={<ArchitecturePage />} />
           <Route path="/about" element={<AboutPage />} />
         </Route>
