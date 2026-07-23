@@ -1,5 +1,5 @@
 {
-    "generated_at": "2026-07-23T08:25:35.290974",
+    "generated_at": "2026-07-23T08:34:59.262488",
     "executive_summary": "VoxForge AI analysed 45,357 customer reviews covering 6 major product topics. The overall customer sentiment is positive, with 86.7% positive reviews and 5.1% negative reviews. The dashboard highlights the most important product areas requiring business attention.",
     "overview": {
         "total_reviews": 45357,
@@ -37,7 +37,7 @@
         "neutral_percentage": 8.2
     },
     "metrics": {
-        "generated_at": "2026-07-23T08:25:35.947345",
+        "generated_at": "2026-07-23T08:35:00.043913",
         "dataset": {
             "reviews": 45357,
             "topics": 6
