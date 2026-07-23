@@ -33,7 +33,7 @@ DEFAULT_ALLOWED_ORIGINS = [
 #   Read allowed frontend origins from the environment.
 def get_allowed_origins() -> list[str]:
     configured_origins = os.getenv(
-        "CORS_FRONTENT_ORIGINS",
+        "CORS_FRONTEND_ORIGINS",
         "",
     ).strip()
 
