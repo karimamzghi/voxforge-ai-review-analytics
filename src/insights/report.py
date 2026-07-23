@@ -62,14 +62,14 @@ def generate_key_findings(
 
     summaries = generate_topic_summaries(repository)
 
-    findings = []
+    findings: List[str] = []
 
     for topic in summaries:
-
         findings.append(
-            f"{topic['topic']} "
-            f"contains {topic['topic_size']} reviews "
-            f"with {topic['positive_ratio']:.0%} positive sentiment."
+            f"{topic['topic_name']} contains "
+            f"{topic['review_count']:,} reviews with "
+            f"{topic['sentiment']['positive_percent']:.1f}% "
+            f"positive sentiment."
         )
 
     return findings
@@ -111,23 +111,25 @@ def generate_business_opportunities(
     repository: InsightsRepository,
 ) -> List[str]:
     """
-    Extract positive opportunities from the analysis.
+    Extract strong positive opportunities from the analysis.
     """
 
     summaries = generate_topic_summaries(repository)
 
-    opportunities = []
+    opportunities: List[str] = []
 
     for topic in summaries:
+        positive_rate = float(
+            topic["sentiment"].get("positive_rate", 0.0)
+        )
 
-        if topic["positive_ratio"] < 0.70:
+        if positive_rate < 0.70:
             continue
 
         opportunities.append(
-            f"Customers consistently report positive "
-            f"experiences with {topic['topic']}. "
-            f"This product area can be highlighted in "
-            f"marketing and customer success initiatives."
+            f"Customers consistently report positive experiences with "
+            f"{topic['topic_name']}. This area can be highlighted in "
+            f"marketing and customer-success initiatives."
         )
 
     return opportunities
@@ -358,32 +360,37 @@ def generate_markdown_report(
             ]
         )
     else:
-        for topic in topics:
+       for topic in topics:
             topic_name = topic.get(
-                "topic",
+                "topic_name",
                 f"Topic {topic.get('topic_id', '')}",
             )
+
+            sentiment = topic.get("sentiment", {})
 
             lines.extend(
                 [
                     f"### {topic_name}",
                     "",
                     f"- Topic ID: {topic.get('topic_id')}",
-                    f"- Reviews: {topic.get('topic_size', 0):,}",
+                    f"- Reviews: {topic.get('review_count', 0):,}",
+                    f"- Review share: "
+                    f"{topic.get('review_share_percent', 0):.1f}%",
                     f"- Positive sentiment: "
-                    f"{_format_percentage(topic.get('positive_ratio', 0))}",
+                    f"{sentiment.get('positive_percent', 0):.1f}%",
+                    f"- Neutral sentiment: "
+                    f"{sentiment.get('neutral_percent', 0):.1f}%",
                     f"- Negative sentiment: "
-                    f"{_format_percentage(topic.get('negative_ratio', 0))}",
+                    f"{sentiment.get('negative_percent', 0):.1f}%",
+                    f"- Dominant sentiment: "
+                    f"{sentiment.get('dominant', 'Unknown')}",
                     f"- Sentiment health: "
-                    f"{topic.get('sentiment_health', 'Unknown')}",
+                    f"{sentiment.get('health', 'Unknown')}",
                     "",
                 ]
             )
 
-            narrative = topic.get(
-                "summary",
-                topic.get("narrative"),
-            )
+            narrative = topic.get("summary")
 
             if narrative:
                 lines.extend(

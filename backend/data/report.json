@@ -1,4 +1,6 @@
 {
+    "generated_at": "2026-07-23T08:25:35.290974",
+    "executive_summary": "VoxForge AI analysed 45,357 customer reviews covering 6 major product topics. The overall customer sentiment is positive, with 86.7% positive reviews and 5.1% negative reviews. The dashboard highlights the most important product areas requiring business attention.",
     "overview": {
         "total_reviews": 45357,
         "total_topics": 6,
@@ -34,6 +36,43 @@
         "negative_percentage": 5.1,
         "neutral_percentage": 8.2
     },
+    "metrics": {
+        "generated_at": "2026-07-23T08:25:35.947345",
+        "dataset": {
+            "reviews": 45357,
+            "topics": 6
+        },
+        "sentiment": {
+            "positive": 86.7,
+            "negative": 5.1,
+            "neutral": 8.2
+        },
+        "recommendations": 6,
+        "high_priority": 5
+    },
+    "key_findings": [
+        "Fire TV & Streaming contains 16,432 reviews with 86.3% positive sentiment.",
+        "Fire Tablets contains 8,437 reviews with 84.1% positive sentiment.",
+        "Echo & Alexa Devices contains 5,788 reviews with 92.0% positive sentiment.",
+        "Kindle E-Readers & Books contains 5,427 reviews with 91.7% positive sentiment.",
+        "Batteries contains 5,420 reviews with 74.5% positive sentiment.",
+        "General / uncategorized contains 3,853 reviews with 96.3% positive sentiment."
+    ],
+    "business_risks": [
+        "Fire TV & Streaming: Optimize streaming performance and application responsiveness.",
+        "Fire Tablets: Focus on device speed, durability, and battery optimisation.",
+        "Echo & Alexa Devices: Review Alexa responsiveness, connectivity, and firmware stability.",
+        "Kindle E-Readers & Books: Improve reading experience, software stability, and synchronization.",
+        "Batteries: Investigate recurring customer concerns and prioritize product improvements."
+    ],
+    "business_opportunities": [
+        "Customers consistently report positive experiences with Fire TV & Streaming. This area can be highlighted in marketing and customer-success initiatives.",
+        "Customers consistently report positive experiences with Fire Tablets. This area can be highlighted in marketing and customer-success initiatives.",
+        "Customers consistently report positive experiences with Echo & Alexa Devices. This area can be highlighted in marketing and customer-success initiatives.",
+        "Customers consistently report positive experiences with Kindle E-Readers & Books. This area can be highlighted in marketing and customer-success initiatives.",
+        "Customers consistently report positive experiences with Batteries. This area can be highlighted in marketing and customer-success initiatives.",
+        "Customers consistently report positive experiences with General / uncategorized. This area can be highlighted in marketing and customer-success initiatives."
+    ],
     "topics": [
         {
             "topic_id": 2,
@@ -234,131 +273,78 @@
             }
         }
     ],
-    "recommendations": {
-        "summary": {
-            "total_recommendations": 6,
-            "high_priority": 5,
-            "medium_priority": 1,
-            "low_priority": 0,
-            "average_severity": 3077.4,
-            "highest_risk_topic": {
-                "topic_id": 2,
-                "topic": "Fire TV & Streaming",
-                "severity": 6632.8,
-                "priority": "High"
-            }
+    "recommendations": [
+        {
+            "topic": "Fire TV & Streaming",
+            "priority": "High",
+            "severity": 6632.8,
+            "recommendation": "Optimize streaming performance and application responsiveness.",
+            "rationale": "Entertainment devices are highly sensitive to lag and crashes.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 2,
+            "topic_size": 16432,
+            "rank": 1
         },
-        "top_recommendations": [
-            {
-                "topic": "Fire TV & Streaming",
-                "priority": "High",
-                "severity": 6632.8,
-                "recommendation": "Optimize streaming performance and application responsiveness.",
-                "rationale": "Entertainment devices are highly sensitive to lag and crashes.",
-                "positive_ratio": 1.0,
-                "negative_ratio": 1.0,
-                "topic_id": 2,
-                "topic_size": 16432,
-                "rank": 1
-            },
-            {
-                "topic": "Fire Tablets",
-                "priority": "High",
-                "severity": 3434.8,
-                "recommendation": "Focus on device speed, durability, and battery optimisation.",
-                "rationale": "Tablet users report performance issues affecting everyday usage.",
-                "positive_ratio": 1.0,
-                "negative_ratio": 1.0,
-                "topic_id": 0,
-                "topic_size": 8437,
-                "rank": 2
-            },
-            {
-                "topic": "Echo & Alexa Devices",
-                "priority": "High",
-                "severity": 2375.2,
-                "recommendation": "Review Alexa responsiveness, connectivity, and firmware stability.",
-                "rationale": "Voice assistant reliability has a direct impact on daily usage.",
-                "positive_ratio": 1.0,
-                "negative_ratio": 1.0,
-                "topic_id": 4,
-                "topic_size": 5788,
-                "rank": 3
-            }
-        ],
-        "recommendations": [
-            {
-                "topic": "Fire TV & Streaming",
-                "priority": "High",
-                "severity": 6632.8,
-                "recommendation": "Optimize streaming performance and application responsiveness.",
-                "rationale": "Entertainment devices are highly sensitive to lag and crashes.",
-                "positive_ratio": 1.0,
-                "negative_ratio": 1.0,
-                "topic_id": 2,
-                "topic_size": 16432,
-                "rank": 1
-            },
-            {
-                "topic": "Fire Tablets",
-                "priority": "High",
-                "severity": 3434.8,
-                "recommendation": "Focus on device speed, durability, and battery optimisation.",
-                "rationale": "Tablet users report performance issues affecting everyday usage.",
-                "positive_ratio": 1.0,
-                "negative_ratio": 1.0,
-                "topic_id": 0,
-                "topic_size": 8437,
-                "rank": 2
-            },
-            {
-                "topic": "Echo & Alexa Devices",
-                "priority": "High",
-                "severity": 2375.2,
-                "recommendation": "Review Alexa responsiveness, connectivity, and firmware stability.",
-                "rationale": "Voice assistant reliability has a direct impact on daily usage.",
-                "positive_ratio": 1.0,
-                "negative_ratio": 1.0,
-                "topic_id": 4,
-                "topic_size": 5788,
-                "rank": 3
-            },
-            {
-                "topic": "Kindle E-Readers & Books",
-                "priority": "High",
-                "severity": 2230.8,
-                "recommendation": "Improve reading experience, software stability, and synchronization.",
-                "rationale": "Reading interruptions reduce perceived product quality.",
-                "positive_ratio": 1.0,
-                "negative_ratio": 1.0,
-                "topic_id": 5,
-                "topic_size": 5427,
-                "rank": 4
-            },
-            {
-                "topic": "Batteries",
-                "priority": "High",
-                "severity": 2228.0,
-                "recommendation": "Investigate recurring customer concerns and prioritize product improvements.",
-                "rationale": "Customer feedback indicates opportunities for quality improvements.",
-                "positive_ratio": 1.0,
-                "negative_ratio": 1.0,
-                "topic_id": 3,
-                "topic_size": 5420,
-                "rank": 5
-            },
-            {
-                "topic": "General / uncategorized",
-                "priority": "Medium",
-                "severity": 1562.8,
-                "recommendation": "Perform deeper qualitative analysis to identify recurring pain points.",
-                "rationale": "This cluster combines reviews without a dominant theme.",
-                "positive_ratio": 1.0,
-                "negative_ratio": 0.36,
-                "topic_id": 1,
-                "topic_size": 3853,
-                "rank": 6
-            }
-        ]
-    }
+        {
+            "topic": "Fire Tablets",
+            "priority": "High",
+            "severity": 3434.8,
+            "recommendation": "Focus on device speed, durability, and battery optimisation.",
+            "rationale": "Tablet users report performance issues affecting everyday usage.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 0,
+            "topic_size": 8437,
+            "rank": 2
+        },
+        {
+            "topic": "Echo & Alexa Devices",
+            "priority": "High",
+            "severity": 2375.2,
+            "recommendation": "Review Alexa responsiveness, connectivity, and firmware stability.",
+            "rationale": "Voice assistant reliability has a direct impact on daily usage.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 4,
+            "topic_size": 5788,
+            "rank": 3
+        },
+        {
+            "topic": "Kindle E-Readers & Books",
+            "priority": "High",
+            "severity": 2230.8,
+            "recommendation": "Improve reading experience, software stability, and synchronization.",
+            "rationale": "Reading interruptions reduce perceived product quality.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 5,
+            "topic_size": 5427,
+            "rank": 4
+        },
+        {
+            "topic": "Batteries",
+            "priority": "High",
+            "severity": 2228.0,
+            "recommendation": "Investigate recurring customer concerns and prioritize product improvements.",
+            "rationale": "Customer feedback indicates opportunities for quality improvements.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 3,
+            "topic_size": 5420,
+            "rank": 5
+        },
+        {
+            "topic": "General / uncategorized",
+            "priority": "Medium",
+            "severity": 1562.8,
+            "recommendation": "Perform deeper qualitative analysis to identify recurring pain points.",
+            "rationale": "This cluster combines reviews without a dominant theme.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 0.36,
+            "topic_id": 1,
+            "topic_size": 3853,
+            "rank": 6
+        }
+    ]
 }

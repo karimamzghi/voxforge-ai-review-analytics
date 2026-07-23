@@ -1,0 +1,127 @@
+{
+    "summary": {
+        "total_recommendations": 6,
+        "high_priority": 5,
+        "medium_priority": 1,
+        "low_priority": 0,
+        "average_severity": 3077.4,
+        "highest_risk_topic": {
+            "topic_id": 2,
+            "topic": "Fire TV & Streaming",
+            "severity": 6632.8,
+            "priority": "High"
+        }
+    },
+    "top_recommendations": [
+        {
+            "topic": "Fire TV & Streaming",
+            "priority": "High",
+            "severity": 6632.8,
+            "recommendation": "Optimize streaming performance and application responsiveness.",
+            "rationale": "Entertainment devices are highly sensitive to lag and crashes.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 2,
+            "topic_size": 16432,
+            "rank": 1
+        },
+        {
+            "topic": "Fire Tablets",
+            "priority": "High",
+            "severity": 3434.8,
+            "recommendation": "Focus on device speed, durability, and battery optimisation.",
+            "rationale": "Tablet users report performance issues affecting everyday usage.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 0,
+            "topic_size": 8437,
+            "rank": 2
+        },
+        {
+            "topic": "Echo & Alexa Devices",
+            "priority": "High",
+            "severity": 2375.2,
+            "recommendation": "Review Alexa responsiveness, connectivity, and firmware stability.",
+            "rationale": "Voice assistant reliability has a direct impact on daily usage.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 4,
+            "topic_size": 5788,
+            "rank": 3
+        }
+    ],
+    "recommendations": [
+        {
+            "topic": "Fire TV & Streaming",
+            "priority": "High",
+            "severity": 6632.8,
+            "recommendation": "Optimize streaming performance and application responsiveness.",
+            "rationale": "Entertainment devices are highly sensitive to lag and crashes.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 2,
+            "topic_size": 16432,
+            "rank": 1
+        },
+        {
+            "topic": "Fire Tablets",
+            "priority": "High",
+            "severity": 3434.8,
+            "recommendation": "Focus on device speed, durability, and battery optimisation.",
+            "rationale": "Tablet users report performance issues affecting everyday usage.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 0,
+            "topic_size": 8437,
+            "rank": 2
+        },
+        {
+            "topic": "Echo & Alexa Devices",
+            "priority": "High",
+            "severity": 2375.2,
+            "recommendation": "Review Alexa responsiveness, connectivity, and firmware stability.",
+            "rationale": "Voice assistant reliability has a direct impact on daily usage.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 4,
+            "topic_size": 5788,
+            "rank": 3
+        },
+        {
+            "topic": "Kindle E-Readers & Books",
+            "priority": "High",
+            "severity": 2230.8,
+            "recommendation": "Improve reading experience, software stability, and synchronization.",
+            "rationale": "Reading interruptions reduce perceived product quality.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 5,
+            "topic_size": 5427,
+            "rank": 4
+        },
+        {
+            "topic": "Batteries",
+            "priority": "High",
+            "severity": 2228.0,
+            "recommendation": "Investigate recurring customer concerns and prioritize product improvements.",
+            "rationale": "Customer feedback indicates opportunities for quality improvements.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 1.0,
+            "topic_id": 3,
+            "topic_size": 5420,
+            "rank": 5
+        },
+        {
+            "topic": "General / uncategorized",
+            "priority": "Medium",
+            "severity": 1562.8,
+            "recommendation": "Perform deeper qualitative analysis to identify recurring pain points.",
+            "rationale": "This cluster combines reviews without a dominant theme.",
+            "positive_ratio": 1.0,
+            "negative_ratio": 0.36,
+            "topic_id": 1,
+            "topic_size": 3853,
+            "rank": 6
+        }
+    ]
+}

@@ -260,6 +260,28 @@ def generate_overview_summary(
             round(average_rating, 2) if pd.notna(average_rating) else None
         )
 
+    sentiment_scores = {
+        "Positive": positive_rate,
+        "Neutral": neutral_rate,
+        "Negative": negative_rate,
+    }
+
+    overall_sentiment = max(
+        sentiment_scores,
+        key=sentiment_scores.get,
+    )
+    
+    output["overall_sentiment"] = overall_sentiment
+
+    output["positive_percent"] = _percentage(positive_rate)
+    output["positive_percentage"] = _percentage(positive_rate)
+
+    output["negative_percent"] = _percentage(negative_rate)
+    output["negative_percentage"] = _percentage(negative_rate)
+
+    output["neutral_percent"] = _percentage(neutral_rate)
+    output["neutral_percentage"] = _percentage(neutral_rate)
+
     return output
 
 

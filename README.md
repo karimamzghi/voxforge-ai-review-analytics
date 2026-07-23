@@ -33,6 +33,9 @@ uvicorn backend.app.main:app --reload
 API documentation:
 http://127.0.0.1:8000/docs
 
+API response 
+http://127.0.0.1:8000/redoc
+
 Health:
 http://127.0.0.1:8000/api/health
 
