@@ -1,62 +1,228 @@
-# VoxForge AI 
+# VoxForge AI Review Analytics
 
+VoxForge AI Review Analytics is an end-to-end customer review analytics platform built as part of my AI Engineering bootcamp.
 
-## Stack
+The project analyses Amazon product reviews using NLP and machine learning to identify customer sentiment, discover product topics, and generate business recommendations through an interactive dashboard.
 
-- FastAPI + Pydantic backend
-- React + Vite + TypeScript frontend
-- TailwindCSS for styling
-- Recharts for visualisations
-- Single Vercel project deployment
+## Live Demo
 
-## Structure
+Frontend
 
-```text
-api/index.py              Vercel Python entry point
-backend/app/              FastAPI application
-backend/data/             Deployment-ready analytics JSON
-frontend/src/             React application
-frontend/public/          VoxForge logo
-```
+https://voxforge-ai-review-analytics-jujq.vercel.app/
 
-The frontend contains no ML or business logic. It consumes typed FastAPI endpoints. The backend reads precomputed dashboard data so heavy model training and inference remain in the notebooks directory and reusable `src/` pipeline.
+Backend API
 
+https://voxforge-ai-review-analytics-production.up.railway.app/
+
+Swagger Documentation
+
+https://voxforge-ai-review-analytics-production.up.railway.app/docs
+
+---
+
+## Features
+
+- Customer review sentiment analysis using DistilBERT
+- Topic discovery with TF-IDF, Truncated SVD, L2 normalisation and K-Means clustering
+- Topic-level sentiment analysis
+- Deterministic Business priority and severity scoring
+- Recommendation generation
+- Interactive analytics dashboard
+- REST API built with FastAPI
+
+---
+
+## Tech Stack
 
 ### Backend
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn backend.app.main:app --reload
-```
-API documentation:
-http://127.0.0.1:8000/docs
+- Python
+- FastAPI
+- Pandas
+- Scikit-learn
+- Hugging Face Transformers
 
-API response 
-http://127.0.0.1:8000/redoc
+### Machine Learning
 
-Health:
-http://127.0.0.1:8000/api/health
-
-Dashboard data:
-http://127.0.0.1:8000/api/dashboard
-
-Topics:
-http://127.0.0.1:8000/api/topics
-
-Recommendations:
-http://127.0.0.1:8000/api/recommendations
+- DistilBERT
+- TF-IDF
+- Truncated SVD
+- L2 normalisation
+- K-Means
 
 ### Frontend
 
+- React
+- TypeScript
+- Vite
+- Recharts
+
+### Deployment
+
+- Railway
+- Vercel
+
+---
+
+## Project Structure
+
+```
+src/
+├── data/
+├── models/
+├── insights/
+├── api/
+└── dashboard/
+```
+
+---
+
+## Analytics Pipeline
+
+1. Load and clean customer reviews
+2. Predict review sentiment using DistilBERT
+3. Convert reviews into TF-IDF vectors
+4. Reduce dimensionality with Truncated SVD
+5. Cluster reviews into product topics using K-Means
+6. Calculate topic metrics
+7. Generate business recommendations
+8. Export analytics artifacts
+9. Serve data through FastAPI
+10. Visualize results in the React dashboard
+
+---
+
+## Running Locally
+
+Clone the repository
+
 ```bash
-cd frontend
+git clone <repository-url>
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the backend
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Run the frontend
+
+```bash
 npm install
 npm run dev
 ```
 
-Frontend: `http://localhost:5173`
+---
 
-Vite proxies `/api` calls to the local FastAPI server.
+## API Documentation
 
+Swagger UI
+
+https://voxforge-ai-review-analytics-production.up.railway.app/docs
+
+---
+
+## Project Structure
+
+```text
+voxforge-ai-review-analytics
+│
+├── backend
+│   ├── app
+│   │   ├── repository.py         # Load analytics artifacts
+│   │   ├── routes.py             # FastAPI endpoints
+│   │   ├── schemas.py            # API response models
+│   │   └── services.py           # Business services
+│   │
+│   └── data
+│       ├── dashboard.json
+│       ├── topics.json
+│       ├── recommendations.json
+│       ├── report.json
+│       └── report.md
+│
+├── frontend
+│   ├── src
+│   │   ├── components
+│   │   ├── pages
+│   │   ├── services
+│   │   └── types
+│   └── public
+│
+├── src
+│   ├── data
+│   │   ├── load.py
+│   │   ├── text_preprocessing.py
+│   │   ├── merge.py
+│   │   ├── validate.py
+│   │   └── schema.py
+│   │
+│   ├── sentiment
+│   │   ├── transformer.py
+│   │   ├── inference.py
+│   │   ├── benchmarking.py
+│   │   ├── comparison.py
+│   │   ├── error_analysis.py
+│   │   └── model_selection.py
+│   │
+│   ├── clustering
+│   │   ├── tfidf_kmeans.py
+│   │   └── labeling.py
+│   │
+│   ├── insights
+│   │   ├── repository.py
+│   │   ├── summary.py
+│   │   ├── recommendation.py
+│   │   ├── report.py
+│   │   └── exporter.py
+│   │
+│   └── observability
+│
+├── notebooks
+│   ├── 01_data_profiling_eda.ipynb
+│   ├── 02_data_cleaning_preprocessing.ipynb
+│   ├── 03_tfidf_logistic_regression.ipynb
+│   ├── 04_distilbert_sentiment.ipynb
+│   ├── 05_deberta_v3_lora_sentiment.ipynb
+│   ├── 06_sentiment_model_selection_and_inference.ipynb
+│   └── 07_tfidf_kmeans_topics.ipynb
+│
+├── models
+│   ├── sentiment
+│   └── clustering
+│
+├── data
+│   ├── raw
+│   ├── interim
+│   └── processed
+│
+├── docs
+│   ├── decisions
+│   ├── model_cards
+│   ├── screenshots
+│   └── PHASE_1_TO_PHASE_2.md
+│
+├── tests
+├── requirements.txt
+├── pyproject.toml
+└── README.md
+```
+
+---
+
+## Presentation Link
+
+https://docs.google.com/presentation/d/1smy5FnNEMF1i4N8TBWelScUtTus5cDTk545K64jshpQ/edit?usp=sharing
+
+---
+
+## Author
+
+Karima Mzoughi
