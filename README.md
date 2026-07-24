@@ -66,71 +66,6 @@ https://voxforge-ai-review-analytics-production.up.railway.app/docs
 
 ## Project Structure
 
-```
-src/
-├── data/
-├── models/
-├── insights/
-├── api/
-└── dashboard/
-```
-
----
-
-## Analytics Pipeline
-
-1. Load and clean customer reviews
-2. Predict review sentiment using DistilBERT
-3. Convert reviews into TF-IDF vectors
-4. Reduce dimensionality with Truncated SVD
-5. Cluster reviews into product topics using K-Means
-6. Calculate topic metrics
-7. Generate business recommendations
-8. Export analytics artifacts
-9. Serve data through FastAPI
-10. Visualize results in the React dashboard
-
----
-
-## Running Locally
-
-Clone the repository
-
-```bash
-git clone <repository-url>
-```
-
-Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-Run the backend
-
-```bash
-uvicorn app.main:app --reload
-```
-
-Run the frontend
-
-```bash
-npm install
-npm run dev
-```
-
----
-
-## API Documentation
-
-Swagger UI
-
-https://voxforge-ai-review-analytics-production.up.railway.app/docs
-
----
-
-## Project Structure
-
 ```text
 voxforge-ai-review-analytics
 │
@@ -214,6 +149,58 @@ voxforge-ai-review-analytics
 ├── pyproject.toml
 └── README.md
 ```
+
+---
+
+## Analytics Pipeline
+
+1. Load and clean customer reviews
+2. Predict review sentiment using DistilBERT
+3. Convert reviews into TF-IDF vectors
+4. Reduce dimensionality with Truncated SVD
+5. Cluster reviews into product topics using K-Means
+6. Calculate topic metrics
+7. Generate business recommendations
+8. Export analytics artifacts
+9. Serve data through FastAPI
+10. Visualize results in the React dashboard
+
+---
+
+## Running Locally
+
+Clone the repository
+
+```bash
+git clone <repository-url>
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the backend
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Run the frontend
+
+```bash
+npm install
+npm run dev
+```
+
+---
+
+## API Documentation
+
+Swagger UI
+
+https://voxforge-ai-review-analytics-production.up.railway.app/docs
 
 ---
 
